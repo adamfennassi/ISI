@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk, messagebox
 from tkinter.font import Font
+from PIL import Image, ImageTk  # Nécessite la bibliothèque Pillow
 
 class DomotiqueApp(Tk):
     def __init__(self):
@@ -8,7 +9,7 @@ class DomotiqueApp(Tk):
         self.title("SmartHome Manager")
         self.geometry("800x600")
         self.configure(padx=25, pady=25, bg='#F0F0F0')
-        
+        self.load_logo()
         # Données de l'application
         self.salles = []
         self.current_room = None
@@ -27,6 +28,24 @@ class DomotiqueApp(Tk):
         # Initialisation
         self.show_main_menu()
     
+    def load_logo(self):
+        try:
+            # Charger l'image (remplacez 'logo.png' par votre fichier)
+            self.logo_image = Image.open("./logo_isi.png")
+            self.logo_image = self.logo_image.resize((50, 50), Image.Resampling.LANCZOS)
+            self.logo_photo = ImageTk.PhotoImage(self.logo_image)
+            
+            # Créer un label pour le logo
+            self.logo_label = Label(self, image=self.logo_photo, bg='#F0F0F0')
+            self.logo_label.image = self.logo_photo  # Garder une référence
+            self.logo_label.place(x=10, y=10)  # Position en haut à gauche
+            
+        except Exception as e:
+            print(f"Erreur de chargement du logo: {e}")
+            # Optionnel: créer un label texte si l'image ne charge pas
+            self.logo_label = Label(self, text="Logo", bg='#F0F0F0')
+            self.logo_label.place(x=10, y=10)
+
     def _setup_styles(self):
         """Configure les styles visuels"""
         self.style.configure('Titre.TLabel', 
@@ -65,7 +84,8 @@ class DomotiqueApp(Tk):
         self.clear_frame(self.main_frame)
         self.show_frame(self.main_frame)
         
-        ttk.Label(self.main_frame, text="SmartHome Manager", style='Titre.TLabel').pack(pady=20)
+        ttk.Label(self.main_frame, text="SmartHome Manager", style='Titre.TLabel')\
+            .pack(pady=20, padx=(60, 0))  # Ajout de padx à gauche
         
         buttons = [
             ("Ajouter une pièce", self.show_add_room),
