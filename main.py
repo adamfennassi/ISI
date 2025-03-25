@@ -52,12 +52,12 @@ class DomotiqueApp(Tk):
 
     def main_menu(self):
         self.clear_frame()
-        ttk.Label(self, text="🏠 SmartHome Manager", style='Titre.TLabel').pack(pady=20)
+        ttk.Label(self, text="SmartHome Manager", style='Titre.TLabel').pack(pady=20)
         
         buttons = [
-            ("➕ Ajouter une pièce", self.show_add_room),
-            ("📋 Gérer les pièces", self.show_manage_rooms),
-            ("🚪 Quitter", self.destroy)
+            ("Ajouter une pièce", self.show_add_room),
+            ("Gérer les pièces", self.show_manage_rooms),
+            ("Quitter", self.destroy)
         ]
         
         for text, cmd in buttons:
@@ -129,10 +129,10 @@ class DomotiqueApp(Tk):
         control_frame.pack(pady=10)
         
         controls = [
-            ("⚙ Modifier", self.edit_room),
-            ("🗑 Supprimer", self.delete_room),
-            ("⚡ Réglages", self.show_advanced_settings),
-            ("🔙 Fermer", manage_window.destroy)
+            ("Modifier", self.edit_room),
+            ("Supprimer", self.delete_room),
+            ("Réglages", self.show_advanced_settings),
+            ("Fermer", manage_window.destroy)
         ]
         
         for i, (text, cmd) in enumerate(controls):
