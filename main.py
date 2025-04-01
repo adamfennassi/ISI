@@ -27,23 +27,29 @@ class DomotiqueApp(Tk):
         
         # Initialisation
         self.show_main_menu()
-    
+
     def load_logo(self):
-        try:
-            # Charger l'image (remplacez 'logo.png' par votre fichier)
-            self.logo_image = Image.open("./logo_isi.png")
-            self.logo_image = self.logo_image.resize((50, 50), Image.Resampling.LANCZOS)
-            self.logo_photo = ImageTk.PhotoImage(self.logo_image)
-            
-            # Créer un label pour le logo
+     try:
+        print("Chargement du logo...")  # Débogage
+        self.logo_image = Image.open("logo_isi.png")
+        self.logo_image = self.logo_image.resize((50, 50), Image.Resampling.LANCZOS)
+        self.logo_photo = ImageTk.PhotoImage(self.logo_image)  # Stocker dans une variable d'instance
+        
+        # Vérifier si le label existe déjà
+        if hasattr(self, 'logo_label'):
+            self.logo_label.config(image=self.logo_photo)
+        else:
             self.logo_label = Label(self, image=self.logo_photo, bg='#F0F0F0')
             self.logo_label.image = self.logo_photo  # Garder une référence
-            self.logo_label.place(x=10, y=10)  # Position en haut à gauche
-            
-        except Exception as e:
-            print(f"Erreur de chargement du logo: {e}")
-            # Optionnel: créer un label texte si l'image ne charge pas
-            self.logo_label = Label(self, text="Logo", bg='#F0F0F0')
+            self.logo_label.place(x=10, y=10)
+
+        print("Logo chargé avec succès !")
+     except Exception as e:
+        print(f"Erreur de chargement du logo : {e}")
+        if hasattr(self, 'logo_label'):
+            self.logo_label.config(text="Logo introuvable", image='')
+        else:
+            self.logo_label = Label(self, text="Logo introuvable", bg='#F0F0F0')
             self.logo_label.place(x=10, y=10)
 
     def _setup_styles(self):
