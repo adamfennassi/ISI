@@ -8,7 +8,7 @@ class DomotiqueApp(Tk):
         super().__init__()
         self.title("SmartHome Manager")
         self.geometry("800x600")
-        self.configure(padx=25, pady=25, bg='#F0F0F0')
+        self.configure(padx=25, pady=25, bg='#F0F0F0',background="white")
         self.load_logo()
         # Données de l'application
         self.salles = []
@@ -16,7 +16,7 @@ class DomotiqueApp(Tk):
         
         # Configuration des styles
         self.style = ttk.Style()
-        self.style.theme_use('clam')
+        self.style.theme_use("classic")
         self._setup_styles()
         
         # Création des frames principaux
@@ -29,38 +29,33 @@ class DomotiqueApp(Tk):
         self.show_main_menu()
 
     def load_logo(self):
-     try:
-        print("Chargement du logo...")  # Débogage
-        self.logo_image = Image.open("logo_isi.png")
-        self.logo_image = self.logo_image.resize((50, 50), Image.Resampling.LANCZOS)
-        self.logo_photo = ImageTk.PhotoImage(self.logo_image)  # Stocker dans une variable d'instance
-        
-        # Vérifier si le label existe déjà
-        if hasattr(self, 'logo_label'):
-            self.logo_label.config(image=self.logo_photo)
-        else:
-            self.logo_label = Label(self, image=self.logo_photo, bg='#F0F0F0')
-            self.logo_label.image = self.logo_photo  # Garder une référence
-            self.logo_label.place(x=10, y=10)
+        try:
+            self.logo_image = Image.open("logo.png")
+            self.logo_image = self.logo_image.resize((50, 50), Image.Resampling.LANCZOS)
+            self.logo_photo = ImageTk.PhotoImage(self.logo_image)
+        except Exception as e:
+            print(f"Erreur de chargement du logo : {e}")
+            self.logo_photo = None
 
-        print("Logo chargé avec succès !")
-     except Exception as e:
-        print(f"Erreur de chargement du logo : {e}")
-        if hasattr(self, 'logo_label'):
-            self.logo_label.config(text="Logo introuvable", image='')
+    def _add_logo_to_frame(self, frame):
+        """Ajoute le logo à un frame spécifique"""
+        if self.logo_photo:
+            logo_label = Label(frame, image=self.logo_photo, bg='#F0F0F0')
+            logo_label.image = self.logo_photo  # Garder une référence
+            logo_label.place(x=10, y=10)
         else:
-            self.logo_label = Label(self, text="Logo introuvable", bg='#F0F0F0')
-            self.logo_label.place(x=10, y=10)
+            logo_label = Label(frame, text="Logo", bg='#F0F0F0')
+            logo_label.place(x=10, y=10)
 
     def _setup_styles(self):
         """Configure les styles visuels"""
-        self.style.configure('Titre.TLabel', 
-                           font=('Helvetica', 16, 'bold'), 
-                           foreground='#2C3E50',
-                           background='#F0F0F0')
+        self.style.configure("Titre.TLabel",
+                font=("Poppins", 30, "bold"),   # Police et taille
+                foreground="#003366",               # Couleur du texte       # Couleur de fond
+                padding=10)
                            
         self.style.configure('Bouton.TButton', 
-                           font=('Arial', 10), 
+                           font=('Arial', 16), 
                            padding=10,
                            foreground='white',
                            background='#3498DB')
@@ -78,19 +73,23 @@ class DomotiqueApp(Tk):
         for f in [self.main_frame, self.add_room_frame, 
                  self.manage_rooms_frame, self.settings_frame]:
             f.pack_forget()
+        
+        # Ajouter le logo au frame avant de l'afficher
+        self._add_logo_to_frame(frame)
         frame.pack(fill=BOTH, expand=True)
 
     def clear_frame(self, frame):
         """Efface tous les widgets d'un frame"""
         for widget in frame.winfo_children():
-            widget.destroy()
+            if not isinstance(widget, Label) or widget["text"] != "Logo":
+                widget.destroy()
 
     def show_main_menu(self):
         """Affiche le menu principal"""
         self.clear_frame(self.main_frame)
         self.show_frame(self.main_frame)
         
-        ttk.Label(self.main_frame, text="SmartHome Manager", style='Titre.TLabel')\
+        ttk.Label(self.main_frame, text="SMART REMOTE", style='Titre.TLabel')\
             .pack(pady=20, padx=(60, 0))  # Ajout de padx à gauche
         
         buttons = [
@@ -101,7 +100,8 @@ class DomotiqueApp(Tk):
         
         for text, cmd in buttons:
             ttk.Button(self.main_frame, text=text, style='Bouton.TButton', 
-                      command=cmd).pack(fill=X, pady=5)
+                    command=cmd, width=40).pack(pady=40, side="top", anchor="center")
+
 
     def show_add_room(self, room_data=None):
         """Affiche le formulaire d'ajout/modification de pièce"""
